@@ -1,4 +1,4 @@
-package com.awesomeproject;
+package com.dev.scopex.giriraj_roy;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

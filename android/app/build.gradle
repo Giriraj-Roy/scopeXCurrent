@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.awesomeproject"
+    namespace "com.dev.scopex.giriraj_roy"
     defaultConfig {
-        applicationId "com.awesomeproject"
+        applicationId "com.dev.scopex.giriraj_roy"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
