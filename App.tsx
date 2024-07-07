@@ -20,6 +20,7 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {addTodoItem, getTodoItems} from './helper';
+import FiraCode from './src/assets/fonts/FiraCode';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -43,7 +44,8 @@ function App(): JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>TODO</Text>
+          {/* <Text style={styles.sectionTitle}>TODO</Text> */}
+          <FiraCode name={"TODO"} style={styles.sectionTitle} />
         </View>
         <View style={styles.sectionContainer}>
           {todoItems.map((item: any) => (
