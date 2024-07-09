@@ -1,9 +1,29 @@
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import FiraCode from '../assets/fonts/FiraCode'
+// import auth from '@react-native-firebase/auth'
 
 const LoginModal = ({phone, setPhone}) => {
+
+    const signInPhone = async (phoneNumber) => {
+        console.log("Executing sign in with phone number");
+        try{
+            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+            console.log("confirmation >> ", confirmation);
+            // console.log("confirmation user >> ", confirmation?._auth?._user);
+            // setConfirm(confirmation);
+        }
+        catch(e){
+            console.log("Error with phone number >> ", e);
+        }
+      }
     const handleGetOTP= ()=>{
+        try{
+            // signInPhone(phone);
+
+        }catch(e){
+            console.error("Error with OTP >> ", e);
+        }
 
     }
     return (
@@ -33,7 +53,7 @@ const LoginModal = ({phone, setPhone}) => {
                         />
                     </View>
                     <TouchableOpacity style={styles.getOtp} onPress={()=>handleGetOTP()}>
-                        <FiraCode name={"Get OTP"} style={{color: "white", fontSize: 16}} />
+                        <FiraCode name={"Send OTP"} style={{color: "white", fontSize: 18, fontWeight: "700"}} />
                     </TouchableOpacity>
                 </View>
 
