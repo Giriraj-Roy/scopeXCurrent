@@ -45,7 +45,7 @@ const Todo = () => {
   // );
 
   const backgroundStyle = {
-    backgroundColor: !isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
 
@@ -117,7 +117,20 @@ const Todo = () => {
         <FlashMessage ref={flashMessageRef} />
         <View style={styles.sectionContainer}>
           {/* <Text style={styles.sectionTitle}>TODO</Text> */}
-          <FiraCode name={"TODO"} style={styles.sectionTitle} />
+          <FiraCode name={"TODO"} style={isDarkMode ? styles.sectionTitleDark : styles.sectionTitle} />
+        </View>
+        <View style={styles.sectionContainer}>
+          <TextInput
+            value={newTodoItem}
+            style={isDarkMode ? styles.sectionDescriptionDark : styles.sectionDescription}
+            placeholder="Add your todo item"
+            placeholderTextColor={isDarkMode ? "whitesmoke" : "black"}
+            onChange={e => {setNewTodoItem(e.nativeEvent.text)}}
+          />
+          <Button
+            title="Add"
+            onPress={handleAddTodo}
+          />
         </View>
         <View style={styles.sectionContainer}>
           {todoItems.map((item) => (
@@ -132,19 +145,7 @@ const Todo = () => {
             ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
           /> */}
         </View>
-        <View style={styles.sectionContainer}>
-          <TextInput
-            value={newTodoItem}
-            style={styles.sectionDescription}
-            placeholder="Add your todo item"
-            placeholderTextColor={"black"}
-            onChange={e => {setNewTodoItem(e.nativeEvent.text)}}
-          />
-          <Button
-            title="Add"
-            onPress={handleAddTodo}
-          />
-        </View>
+        
       </ScrollView>
     </SafeAreaView>
   );
@@ -163,11 +164,22 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: "black"
   },
+  sectionTitleDark: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: "whitesmoke"
+  },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
     color: "black"
+  },
+  sectionDescriptionDark: {
+    marginTop: 8,
+    fontSize: 18,
+    fontWeight: '400',
+    color: "whitesmoke"
   },
   highlight: {
     fontWeight: '700',

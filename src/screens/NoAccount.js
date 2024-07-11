@@ -6,11 +6,14 @@ import FlashMessage from 'react-native-flash-message'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { WEB_CLIENT_ID } from '../constants/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 const NoAccount = ({navigation}) => {
 
   const [phone, setPhone] = useState("")
   const flashMsgRef = useRef()
+  const isDarkMode = useColorScheme()==='dark'
+
 
 
   useEffect(()=>{
@@ -50,7 +53,7 @@ const googleLogin = async () => {
   };
 
   return (
-    <SafeAreaView style={{flex:1}}>
+    <SafeAreaView style={{flex:1, backgroundColor : isDarkMode ? Colors.dark : Colors.light}}>
       <FlashMessage ref={flashMsgRef}/>
       <ImageBackground
             source={require("../assets/images/background.jpg")}

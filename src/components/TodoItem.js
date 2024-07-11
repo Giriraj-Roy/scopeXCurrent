@@ -1,16 +1,19 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native'
 import React, { useState } from 'react'
 import FiraCode from '../assets/fonts/FiraCode'
 import EditTodo from './EditTodo';
 
+
 const TodoItem = ({item, flashMessageRef, todoItems, setTodoItems}) => {
-  const [editTodoVisible, setEditTodoVisible] = useState(false);
+
+    const [editTodoVisible, setEditTodoVisible] = useState(false);
+    const darkMode = useColorScheme()==='dark'
 
   return (
     <View key={item.id} style={styles.todoItem}>
-        <FiraCode name={item.title} style={styles.sectionDescription} />
-        <TouchableOpacity onPress={()=>setEditTodoVisible(true)} style={{padding: 3, paddingHorizontal: 6, borderWidth: 1, borderRadius: 4,}}>
-            <FiraCode name={"Edit"} />
+        <FiraCode name={item.title} style={darkMode ? styles.sectionDescriptionDark : styles.sectionDescription} />
+        <TouchableOpacity onPress={()=>setEditTodoVisible(true)} style={{padding: 3, paddingHorizontal: 6, borderWidth: 1, borderRadius: 4, borderColor:`${darkMode ? "whitesmoke" : "black"}`}}>
+            <FiraCode name={"Edit"} style={{color: `${darkMode ? "whitesmoke" : "black"}`}}/>
         </TouchableOpacity>
         <EditTodo todoItems={todoItems} setTodoItems={setTodoItems} flashMessageRef={flashMessageRef} isVisible={editTodoVisible} setEditTodoVisible={setEditTodoVisible} item={item} />
     </View>
@@ -25,6 +28,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '400',
         color: "black"
+      },
+      sectionDescriptionDark: {
+        marginTop: 8,
+        fontSize: 18,
+        fontWeight: '400',
+        color: "#F5F5F5"
       },
       todoItem: {
         flexDirection: "row",

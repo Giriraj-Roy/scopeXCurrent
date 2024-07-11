@@ -1,12 +1,15 @@
-import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native'
 import React from 'react'
 import FiraCode, { FiraCodeBold } from '../assets/fonts/FiraCode'
 import auth from '@react-native-firebase/auth'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from './Button'
+import { Colors } from 'react-native/Libraries/NewAppScreen'
 
 const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
+
+    const isDarkMode = useColorScheme()==='dark'
 
     const signInPhone = async (phoneNumber) => {
         console.log("Executing sign in with phone number");
@@ -59,9 +62,9 @@ const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
             //     visible={isVisible}
             //     transparent={true}
             // >
-                <View style={styles.modal}>
+                <View style={[styles.modal, {backgroundColor : isDarkMode ? Colors.dark: Colors.light}]}>
                     <View style={{width: "100%", alignItems: "center", marginVertical: 10, marginBottom: 150,}}>
-                        <FiraCodeBold name={"Login to the App \n using below Profiles"} style={{fontSize: 22, color: "gray", fontWeight: "600", textAlign: "center"}}/>
+                        <FiraCodeBold name={"Login to the App \n using below Profiles"} style={{fontSize: 22, color: isDarkMode ? Colors.lighter : "gray", fontWeight: "600", textAlign: "center"}}/>
                     </View>
                     {/* <View style={{ flexDirection: 'row', marginTop: 20, margin: 10 }}>
                         <TextInput style={{ height: 50, marginRight: 12, borderWidth: 2, borderRadius: 5, padding: 18, backgroundColor: '#F9FAFB', borderColor: '#F1F3F5' }}
@@ -83,7 +86,7 @@ const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
                     {/* <TouchableOpacity style={styles.getOtp} onPress={()=>handleGetOTP()}>
                         <FiraCode name={"Sign In With Google"} style={{color: "white", fontSize: 18, fontWeight: "700"}} />
                     </TouchableOpacity> */}
-                    <Button name={"Sign In With Google"} onPress={handleGetOTP} />
+                    <Button name={"Sign In With Google"} textStyle={{color: isDarkMode ? Colors.darker : Colors.light}} onPress={handleGetOTP} />
                 </View>
 
             // </Modal>

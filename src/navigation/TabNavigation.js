@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Platform} from 'react-native';
+import { Image, Platform, useColorScheme} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
 import Todo from '../screens/Todo';
@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   
   const [token, setToken] = useState("")
-
+  const isDarkMode = useColorScheme()==='dark'
     const getToken = async ()=>{
         try{
             setToken(await AsyncStorage.getItem("userToken"))
@@ -54,7 +54,7 @@ const TabNavigation = () => {
           },
           tabBarStyle: {
             height: Platform.OS === 'android' ? '10%' : '12%',
-            backgroundColor: 'white',
+            backgroundColor: isDarkMode ? "black" : 'white',
           },
         })}>
         <Tab.Screen name="Todo" component={Todo} options={{headerShown:false}} />
