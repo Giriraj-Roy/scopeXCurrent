@@ -9,9 +9,13 @@ import React from 'react';
 import AppNavigation from './src/navigation/AppNavigation';
 
 const App = ()=>{
-  return(
-    <AppNavigation/>
-  )
+  try{
+    return(
+      <AppNavigation/>
+    ) 
+  }catch(e){
+    console.log("Error from app root", e)
+  }
 }
 
 

@@ -1,12 +1,15 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  ActivityIndicator,
   Button,
+  FlatList,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
   useColorScheme,
 } from 'react-native';
@@ -15,14 +18,31 @@ import {addTodoItem, getTodoItems} from '../../helper';
 import FiraCode from '../assets/fonts/FiraCode';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import showToast from '../components/Toast';
+import { useInfiniteQuery } from 'react-query';
+import EditTodo from '../components/EditTodo';
+import TodoItem from '../components/TodoItem';
 
 
 const Todo = () => {
 
   const isDarkMode = useColorScheme() === 'dark';
-  const [todoItems, setTodoItems] = React.useState([]);
-  const [newTodoItem, setNewTodoItem] = React.useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [editTodoVisible, setEditTodoVisible] = useState(false);
+  const [todoItems, setTodoItems] = useState([]);
+  const [newTodoItem, setNewTodoItem] = useState('');
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const flashMessageRef = useRef()
+
+  // const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
+  //   'items',
+  //   ({ pageParam = 1 }) => fetchItems(pageParam),
+  //   {
+  //     getNextPageParam: (lastPage) => lastPage.nextPage || undefined,
+  //   }
+  // );
 
   const backgroundStyle = {
     backgroundColor: !isDarkMode ? Colors.darker : Colors.lighter,
@@ -31,6 +51,7 @@ const Todo = () => {
 
   useEffect(() => {
     getTodoItems(0, 10).then(items => setTodoItems(items));
+    setData(todoItems)
     console.log(Colors);
   }, []);
 
@@ -48,6 +69,43 @@ const Todo = () => {
     })
   }
 
+  const renderTodo = ({item})=>{
+    return(
+      <View key={item.id} style={styles.todoItem}>
+        <Text style={styles.sectionDescription}>{item.title}</Text>
+      </View>
+    )
+  }
+  const handleLoadData = () => {
+    if (!hasNextPage || isLoading) return;
+    setIsLoading(true);
+    setPage((prevPage) => prevPage + 1);
+    loadNextPage();
+  };
+  
+  const loadNextPage = () => {
+    // Load the next page of data from your existing data
+    let pageSize=3;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const nextPageData = data.slice(startIndex, endIndex);
+  
+    if (nextPageData.length < pageSize) {
+      setHasNextPage(false);
+    }
+  
+    setData((prevData) => [...prevData, ...nextPageData]);
+    setIsLoading(false);
+  };
+  const handleEditPress = ()=>{
+    try{
+      setEditTodoVisible(true);
+
+    }catch(e){
+      console.log("Error handleEditPress", e);
+    }
+  }
+
 
   return (
     <SafeAreaView style={[{backgroundStyle}, {flex: 1}]}>
@@ -55,7 +113,7 @@ const Todo = () => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+      <ScrollView  style={backgroundStyle}>
         <FlashMessage ref={flashMessageRef} />
         <View style={styles.sectionContainer}>
           {/* <Text style={styles.sectionTitle}>TODO</Text> */}
@@ -63,10 +121,16 @@ const Todo = () => {
         </View>
         <View style={styles.sectionContainer}>
           {todoItems.map((item) => (
-            <View key={item.id} style={styles.todoItem}>
-              <Text style={styles.sectionDescription}>{item.title}</Text>
-            </View>
+            <TodoItem todoItems={todoItems} setTodoItems={setTodoItems} key={item?.id} item={item} flashMessageRef={flashMessageRef} />
           ))}
+          {/* <FlatList 
+            data={todoItems}
+            renderItem={renderTodo}
+            keyExtractor={(item) => item.id}
+            onEndReached={()=> {setPageSize(prev=>prev+3); handleAddTodo()}}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
+          /> */}
         </View>
         <View style={styles.sectionContainer}>
           <TextInput
@@ -109,10 +173,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   todoItem: {
+    flexDirection: "row",
     fontSize: 18,
     fontWeight: '400',
     borderBottomWidth: 1,
     padding: 8,
     borderBottomColor: 'gray',
+    justifyContent: "space-between",
+    alignItems: "center"
   },
 });
