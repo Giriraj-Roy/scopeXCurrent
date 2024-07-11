@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "317170037987",
+    "project_id": "scopex-giriraj",
+    "storage_bucket": "scopex-giriraj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317170037987:android:fa854a24d572e2bc8481d6",
+        "android_client_info": {
+          "package_name": "com.dev.scopex.giriraj_roy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4oMzaOys5_rRbofX-gt0LPFzSCDS4vVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

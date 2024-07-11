@@ -1,25 +1,43 @@
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import FiraCode from '../assets/fonts/FiraCode'
-// import auth from '@react-native-firebase/auth'
+import auth from '@react-native-firebase/auth'
 
 const LoginModal = ({phone, setPhone}) => {
 
     const signInPhone = async (phoneNumber) => {
         console.log("Executing sign in with phone number");
         try{
-            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
-            console.log("confirmation >> ", confirmation);
+            const confirmation = await auth().signInWithPhoneNumber("+91"+phoneNumber);
+            // console.log("confirmation >> ", confirmation);
             // console.log("confirmation user >> ", confirmation?._auth?._user);
             // setConfirm(confirmation);
+            confirmCode(confirmation)
         }
         catch(e){
             console.log("Error with phone number >> ", e);
         }
       }
+      const confirmCode = async (confirm) => {
+        try {
+            otp="123456"
+            const data = await confirm.confirm(otp);
+            // setOtpValid(true);
+            // console.log("OTP confirm: ", otp);
+            console.log("Confirm data >> ", data);
+            // if (data?.user?.uid) {
+                // confirmVerificationCode();
+            // }
+        } catch (error) {
+            console.error("Error otp", error);
+            // setOtpValid(false);
+            // console.log("OTP not confirmed: ", otp);
+            // showToast('Invalid OTP.', '#F3CECF', '#D2464B', require("../Assets/Images/x-mark.png"), flashMessageRef, 60)
+        }
+    }
     const handleGetOTP= ()=>{
         try{
-            // signInPhone(phone);
+            signInPhone(phone);
 
         }catch(e){
             console.error("Error with OTP >> ", e);
