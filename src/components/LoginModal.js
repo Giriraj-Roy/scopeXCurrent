@@ -54,10 +54,10 @@ const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
 
     }
     return (
-            <Modal
-                visible={isVisible}
-                transparent={true}
-            >
+            // <Modal
+            //     visible={isVisible}
+            //     transparent={true}
+            // >
                 <View style={styles.modal}>
                     <View style={{width: "100%", alignItems: "center", marginVertical: 10}}>
                         <FiraCodeBold name={"Login to the App"} style={{fontSize: 22, color: "gray", fontWeight: "700"}}/>
@@ -85,7 +85,7 @@ const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
                     </TouchableOpacity>
                 </View>
 
-            </Modal>
+            // </Modal>
     )
 }
 

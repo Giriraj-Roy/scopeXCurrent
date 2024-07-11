@@ -5,24 +5,32 @@ import 'react-native-gesture-handler';
 import Todo from '../screens/Todo';
 import Profile from '../screens/Profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NoAccount from '../screens/NoAccount';
 
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigation = () => {
+  
+  const [token, setToken] = useState("")
 
     const getToken = async ()=>{
         try{
-            const token = await AsyncStorage.getItem("userToken")
+            setToken(await AsyncStorage.getItem("userToken"))
         }catch(e){
             console.error("error getToken", e);
         }
     }
 
+    useEffect(()=>{
+      getToken()
+    },[])
+
 
   return (
+    token!=null ?
       <Tab.Navigator
-        initialRouteName={'Profile'}
+        initialRouteName={'Todo'}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             
@@ -52,6 +60,9 @@ const TabNavigation = () => {
         <Tab.Screen name="Todo" component={Todo} options={{headerShown:false}} />
         <Tab.Screen name="Profile" component={Profile} options={{headerShown:false}}/>
       </Tab.Navigator>
+
+    :
+    <NoAccount/>
   );
 };
 export default TabNavigation;

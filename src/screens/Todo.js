@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Button,
   SafeAreaView,
@@ -13,20 +13,41 @@ import {
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {addTodoItem, getTodoItems} from '../../helper';
 import FiraCode from '../assets/fonts/FiraCode';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
+import showToast from '../components/Toast';
 
 
 const Todo = () => {
-    const isDarkMode = useColorScheme() === 'dark';
+
+  const isDarkMode = useColorScheme() === 'dark';
+  const [todoItems, setTodoItems] = React.useState([]);
+  const [newTodoItem, setNewTodoItem] = React.useState('');
+  const flashMessageRef = useRef()
 
   const backgroundStyle = {
     backgroundColor: !isDarkMode ? Colors.darker : Colors.lighter,
   };
-  const [todoItems, setTodoItems] = React.useState([]);
-  const [newTodoItem, setNewTodoItem] = React.useState('');
+
+
   useEffect(() => {
     getTodoItems(0, 10).then(items => setTodoItems(items));
     console.log(Colors);
   }, []);
+
+  const handleAddTodo = () => {
+    addTodoItem(newTodoItem)
+    .then(() => {
+      getTodoItems(0, 10).then(items => {
+        setTodoItems(items);
+        showToast("Todo Added", "lightgreen", "green", flashMessageRef, 10);
+        setNewTodoItem("")
+      });
+    })
+    .catch((e)=>{
+      showToast(e.message, "yellow", "chromeYellow",  flashMessageRef, 10);
+    })
+  }
+
 
   return (
     <SafeAreaView style={[{backgroundStyle}, {flex: 1}]}>
@@ -34,9 +55,8 @@ const Todo = () => {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+        <FlashMessage ref={flashMessageRef} />
         <View style={styles.sectionContainer}>
           {/* <Text style={styles.sectionTitle}>TODO</Text> */}
           <FiraCode name={"TODO"} style={styles.sectionTitle} />
@@ -50,20 +70,15 @@ const Todo = () => {
         </View>
         <View style={styles.sectionContainer}>
           <TextInput
+            value={newTodoItem}
             style={styles.sectionDescription}
             placeholder="Add your todo item"
             placeholderTextColor={"black"}
-            onChange={e => setNewTodoItem(e.nativeEvent.text)}
+            onChange={e => {setNewTodoItem(e.nativeEvent.text)}}
           />
           <Button
             title="Add"
-            onPress={() => {
-              addTodoItem(newTodoItem).then(() => {
-                getTodoItems(0, 10).then(items => {
-                  setTodoItems(items);
-                });
-              });
-            }}
+            onPress={handleAddTodo}
           />
         </View>
       </ScrollView>

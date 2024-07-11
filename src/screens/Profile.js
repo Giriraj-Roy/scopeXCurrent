@@ -23,6 +23,7 @@ const Profile = ({navigation, route}) => {
             await AsyncStorage.removeItem("userDetails");
 
             console.log("Logged out");
+            navigation.navigate("Login")
 
         }catch(e){
             console.error("Error Signin out", e);

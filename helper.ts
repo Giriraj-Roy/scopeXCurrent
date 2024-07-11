@@ -28,7 +28,7 @@ export async function addTodoItem(title: string) {
   if (title.length < 3) {
     throw new Error('Title must be at least 3 characters long');
   }
-  await wait(1000);
+  await wait(200);
   //   Throw random error
 //  if (Math.random() < 0.2) {
 //    throw new Error('Random error');
