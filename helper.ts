@@ -15,9 +15,9 @@ export async function getTodoItems(
 ): Promise<TodoItem[]> {
   await wait(200);
   //   Throw random error
-  if (Math.random() < 0.2) {
-    throw new Error('Random error');
-  }
+//  if (Math.random() < 0.2) {
+//    throw new Error('Random error');
+//  }
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );
@@ -30,9 +30,9 @@ export async function addTodoItem(title: string) {
   }
   await wait(1000);
   //   Throw random error
-  if (Math.random() < 0.2) {
-    throw new Error('Random error');
-  }
+//  if (Math.random() < 0.2) {
+//    throw new Error('Random error');
+//  }
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );
@@ -47,9 +47,9 @@ export async function addTodoItem(title: string) {
 export async function updateTodoItem(todoItem: TodoItem) {
   await wait(500);
   //   Throw random error
-  if (Math.random() < 0.2) {
-    throw new Error('Random error');
-  }
+//  if (Math.random() < 0.2) {
+//    throw new Error('Random error');
+//  }
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );
@@ -63,9 +63,9 @@ export async function updateTodoItem(todoItem: TodoItem) {
 export async function deleteTodoItem(id: string) {
   await wait(500);
   //   Throw random error
-  if (Math.random() < 0.2) {
-    throw new Error('Random error');
-  }
+//  if (Math.random() < 0.2) {
+//    throw new Error('Random error');
+//  }
   const todoItems = JSON.parse(
     (await AsyncStorage.getItem('todoItems')) || '[]',
   );

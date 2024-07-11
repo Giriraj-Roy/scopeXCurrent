@@ -3,8 +3,9 @@ import React from 'react'
 import FiraCode, { FiraCodeBold } from '../assets/fonts/FiraCode'
 import auth from '@react-native-firebase/auth'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const LoginModal = ({isVisible, googleLogin, phone, setPhone}) => {
+const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
 
     const signInPhone = async (phoneNumber) => {
         console.log("Executing sign in with phone number");
@@ -36,10 +37,16 @@ const LoginModal = ({isVisible, googleLogin, phone, setPhone}) => {
             // showToast('Invalid OTP.', '#F3CECF', '#D2464B', require("../Assets/Images/x-mark.png"), flashMessageRef, 60)
         }
     }
-    const handleGetOTP= ()=>{
+    const handleGetOTP= async ()=>{
         try{
             // signInPhone(phone);
-            googleLogin()
+            const token = await AsyncStorage.getItem("userToken")
+            if(token==null){
+                googleLogin()
+            }
+            else{
+                navigation.navigate("TabNavigation");
+            }
 
         }catch(e){
             console.error("Error with OTP >> ", e);

@@ -32,7 +32,7 @@ const googleLogin = async () => {
           // await AsyncStorage.setItem("userImage", userInfo.user.photo);
           await AsyncStorage.setItem("userDetails", JSON.stringify(userInfo?.user));
           console.log("Login", userInfo?.user);
-          navigation.navigate("Profile", {userInfo : userInfo?.user});
+          navigation.navigate("TabNavigation");
         }
         
 
@@ -59,7 +59,7 @@ const googleLogin = async () => {
       <View style={{alignSelf: "center", justifyContent: "center", marginBottom: "30%"}}>
         <FiraCode name={"Log In to everyone's \nFavourite Todo Tracker"} style={{color: "#F5F5F5", fontSize: 28, textAlign: "center"}} />
       </View>
-      <LoginModal isVisible={true} googleLogin={googleLogin} phone={phone} setPhone={setPhone} />
+      <LoginModal isVisible={true} navigation={navigation} googleLogin={googleLogin} phone={phone} setPhone={setPhone} />
       </ImageBackground>
     </SafeAreaView>
   )

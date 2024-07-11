@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Platform} from 'react-native';
+import { Image, Platform} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
 import Todo from '../screens/Todo';
