@@ -27,9 +27,10 @@ const googleLogin = async () => {
         if(userInfo?.idToken != undefined){
 
           await AsyncStorage.setItem("userToken", userInfo.idToken);
-          await AsyncStorage.setItem("username", userInfo.user.name);
-          await AsyncStorage.setItem("useremail", userInfo.user.email);
-          await AsyncStorage.setItem("userImage", userInfo.user.photo);
+          // await AsyncStorage.setItem("username", userInfo.user.name);
+          // await AsyncStorage.setItem("useremail", userInfo.user.email);
+          // await AsyncStorage.setItem("userImage", userInfo.user.photo);
+          await AsyncStorage.setItem("userDetails", JSON.stringify(userInfo?.user));
           console.log("Login", userInfo?.user);
           navigation.navigate("Profile", {userInfo : userInfo?.user});
         }

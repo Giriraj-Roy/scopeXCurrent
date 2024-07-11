@@ -12,16 +12,17 @@ const Profile = ({navigation, route}) => {
     const [userDetails, setUserDetails] = useState({})
 
     const getDetails = async ()=>{
-        const username  =   await AsyncStorage.getItem("username");
-        const userEmail =   await AsyncStorage.setItem("useremail");
-        const userImage =   await AsyncStorage.getItem("userImage");
-        setUserDetails({username, userEmail, userImage})
+        const user  =   JSON.parse(await AsyncStorage.getItem("userDetails"));
+        setUserDetails(user)
+        // console.log(user);
     }
     const handleLogout = async ()=>{
         try{
             await GoogleSignin.signOut();
             await AsyncStorage.removeItem("userToken");
-            console.log("Logged out",);
+            await AsyncStorage.removeItem("userDetails");
+
+            console.log("Logged out");
 
         }catch(e){
             console.error("Error Signin out", e);
@@ -29,14 +30,14 @@ const Profile = ({navigation, route}) => {
     }
 
     useEffect(()=>{
-        // getDetails()
-        console.log(route?.params?.userInfo);
-        setUserDetails(route?.params?.userInfo)
+        getDetails()
+        // console.log(route?.params?.userInfo);
+        // setUserDetails(route?.params?.userInfo)
     },[])
 
   return (
     <SafeAreaView style={{flex: 1}}>
-        <View>
+        <View style={{width:"100%", paddingHorizontal: "5%", paddingVertical: "3%"}}>
             <FiraCode name={"Profile"} style={{color: "black", fontSize: 32}} />
         </View>
         {
