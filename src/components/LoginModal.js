@@ -1,9 +1,10 @@
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import FiraCode from '../assets/fonts/FiraCode'
+import FiraCode, { FiraCodeBold } from '../assets/fonts/FiraCode'
 import auth from '@react-native-firebase/auth'
+import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 
-const LoginModal = ({phone, setPhone}) => {
+const LoginModal = ({isVisible, googleLogin, phone, setPhone}) => {
 
     const signInPhone = async (phoneNumber) => {
         console.log("Executing sign in with phone number");
@@ -37,7 +38,8 @@ const LoginModal = ({phone, setPhone}) => {
     }
     const handleGetOTP= ()=>{
         try{
-            signInPhone(phone);
+            // signInPhone(phone);
+            googleLogin()
 
         }catch(e){
             console.error("Error with OTP >> ", e);
@@ -46,12 +48,12 @@ const LoginModal = ({phone, setPhone}) => {
     }
     return (
             <Modal
-                visible={true}
+                visible={isVisible}
                 transparent={true}
             >
                 <View style={styles.modal}>
                     <View style={{width: "100%", alignItems: "center", marginVertical: 10}}>
-                        <FiraCode name={"Login to the App"} style={{fontSize: 22, color: "gray", fontWeight: "700"}}/>
+                        <FiraCodeBold name={"Login to the App"} style={{fontSize: 22, color: "gray", fontWeight: "700"}}/>
                     </View>
                     <View style={{ flexDirection: 'row', marginTop: 20, margin: 10 }}>
                         <TextInput style={{ height: 50, marginRight: 12, borderWidth: 2, borderRadius: 5, padding: 18, backgroundColor: '#F9FAFB', borderColor: '#F1F3F5' }}
@@ -71,7 +73,8 @@ const LoginModal = ({phone, setPhone}) => {
                         />
                     </View>
                     <TouchableOpacity style={styles.getOtp} onPress={()=>handleGetOTP()}>
-                        <FiraCode name={"Send OTP"} style={{color: "white", fontSize: 18, fontWeight: "700"}} />
+                        <FiraCode name={"Sign In With Google"} style={{color: "white", fontSize: 18, fontWeight: "700"}} />
+                        {/* <GoogleSigninButton/> */}
                     </TouchableOpacity>
                 </View>
 

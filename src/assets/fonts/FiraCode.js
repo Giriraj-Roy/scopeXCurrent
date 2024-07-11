@@ -7,11 +7,21 @@ const FiraCode = ({name, style}) => {
     );
 }
 
+export const FiraCodeBold = ({name, style}) => {
+    return (
+        <Text style={[styles.textBold,style]}>{name}</Text>
+    );
+}
+
 export default FiraCode
 
 const styles = StyleSheet.create({
     text : {
         fontFamily : 'FiraCode-Regular',
+        color: "#575757"
+    },
+    textBold : {
+        fontFamily : 'FiraCode-Bold',
         color: "#575757"
     }
 })
