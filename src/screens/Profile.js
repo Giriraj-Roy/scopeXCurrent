@@ -23,9 +23,11 @@ const Profile = ({navigation, route}) => {
     }
     const handleLogout = async ()=>{
         try{
+            await GoogleSignin.configure()
             await GoogleSignin.signOut();
             await AsyncStorage.removeItem("userToken");
             await AsyncStorage.removeItem("userDetails");
+            await AsyncStorage.setItem("todoItems", "");
 
             console.log("Logged out");
             navigation.navigate("Login")
@@ -63,7 +65,7 @@ const Profile = ({navigation, route}) => {
         </View>
         {
             <View style={{ alignItems: "center"}}>
-                <Image source= {{uri : userDetails.photo ? userDetails?.photo : "https://picsum.photos/200/300"}} style={styles.image} />
+                <Image source= {{uri : userDetails?.photo ? userDetails?.photo : "https://picsum.photos/200/300"}} style={styles.image} />
                 <FiraCode name={`User ID : ${userDetails?.id}`} style={{color: isDarkMode ? Colors.light : "black", fontSize: 14}} />
                 <TouchableOpacity onPress={()=>handleColorScheme()} style={{marginVertical: 10, borderWidth: 1, borderColor: isDarkMode? Colors.light : "black", paddingVertical: 8, paddingHorizontal: 20, borderRadius: 4}} >
                     <FiraCode name={`Switch to ${isDarkMode ? "Light" : "Dark"} Mode`} style={{color: isDarkMode ? "white" : "black", fontSize: 18, fontWeight: "700"}} />

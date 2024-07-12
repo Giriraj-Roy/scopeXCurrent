@@ -7,6 +7,7 @@ import Profile from '../screens/Profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NoAccount from '../screens/NoAccount';
 import { AppContext } from '../utils/AppContext';
+import Login from '../screens/Login';
 
 
 const Tab = createBottomTabNavigator();
@@ -63,7 +64,7 @@ const TabNavigation = () => {
       </Tab.Navigator>
 
     :
-    <NoAccount/>
+    <Login/>
   );
 };
 export default TabNavigation;

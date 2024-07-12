@@ -1,5 +1,5 @@
 import { ImageBackground, SafeAreaView, StyleSheet, Text, useColorScheme, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import FiraCode from '../assets/fonts/FiraCode'
 import LoginModal from '../components/LoginModal'
 import FlashMessage from 'react-native-flash-message'
@@ -7,12 +7,15 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { WEB_CLIENT_ID } from '../constants/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { AppContext } from '../utils/AppContext'
+import Loader from '../components/Loader'
 
 const Login = ({navigation}) => {
 
   const [phone, setPhone] = useState("")
   const flashMsgRef = useRef()
-  const isDarkMode = useColorScheme()==='dark'
+  // const isDarkMode = useColorScheme()==='dark'
+  const {isDarkMode, loading, setLoading} = useContext(AppContext);
 
 
 
@@ -24,6 +27,7 @@ const Login = ({navigation}) => {
 
 const googleLogin = async () => {
     try {
+        setLoading(true);
         await GoogleSignin.hasPlayServices();
         const userInfo = await GoogleSignin.signIn();
         console.log("userinfo", userInfo);
@@ -34,9 +38,12 @@ const googleLogin = async () => {
           // await AsyncStorage.setItem("useremail", userInfo.user.email);
           // await AsyncStorage.setItem("userImage", userInfo.user.photo);
           await AsyncStorage.setItem("userDetails", JSON.stringify(userInfo?.user));
+
           console.log("Login", userInfo?.user);
-          navigation.navigate("TabNavigation");
+          setLoading(false)
+          console.log(await AsyncStorage.getItem("userDetails"));
         }
+        await navigation.navigate("TabNavigation");
         
 
 
@@ -53,6 +60,7 @@ const googleLogin = async () => {
   };
 
   return (
+    loading ? <Loader/> :
     <SafeAreaView style={{flex:1, backgroundColor : isDarkMode ? Colors.dark : Colors.light}}>
       <FlashMessage ref={flashMsgRef}/>
       <ImageBackground

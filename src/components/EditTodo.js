@@ -6,28 +6,36 @@ import { getTodoItems, updateTodoItem } from '../../helper'
 import showToast from './Toast'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import { AppContext } from '../utils/AppContext'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const EditTodo = ({isVisible, setEditTodoVisible, item, flashMessageRef, todoItems, setTodoItems }) => {
 
     const [updatedTodo, setUpdatedTodo] = useState({})
     // const [loading, setLoading] = useState(false)
     const {isDarkMode, setLoading} = useContext(AppContext);
+    const getTodos = async ()=>{
+      const res = JSON.parse(await  AsyncStorage.getItem('todoItems'))
+      // console.log("todos ",res, res.length);
+      setTodoItems(res)
+    }
 
     useEffect(()=>{
-        getTodoItems(0, 10).then(items => setTodoItems(items));
+        // getTodoItems(0, 10).then(items => setTodoItems(items));
+        getTodos()
     },[])
 
     const handleUpdateTodo = () => {
       setLoading(true)
         updateTodoItem(updatedTodo)
         .then(() => {
-          getTodoItems(0, 10).then(items => {
-            setTodoItems(items);
-            // setNewTodoItem("")
-            setEditTodoVisible(false);
-            showToast("Updated Successfully", "lightgreen", "green", flashMessageRef, 10);
+          // getTodoItems(0, 10).then(items => {
+          //   setTodoItems(items);
+          //   // setNewTodoItem("")
             
-          });
+          // });
+          getTodos()
+          setEditTodoVisible(false);
+          showToast("Updated Successfully", "lightgreen", "green", flashMessageRef, 10);
         })
         .catch((e)=>{
           showToast(e.message, "yellow", "chromeYellow",  flashMessageRef, 10);

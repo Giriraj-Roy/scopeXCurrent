@@ -23,12 +23,13 @@ import EditTodo from '../components/EditTodo';
 import TodoItem from '../components/TodoItem';
 import { AppContext } from '../utils/AppContext';
 import Loader from '../components/Loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Todo = () => {
 
 
-  const {isDarkMode, loading} = useContext(AppContext);
+  const {isDarkMode, loading, setLoading} = useContext(AppContext);
   const [editTodoVisible, setEditTodoVisible] = useState(false);
   const [todoItems, setTodoItems] = useState([]);
   const [newTodoItem, setNewTodoItem] = useState('');
@@ -52,19 +53,26 @@ const Todo = () => {
 
 
   useEffect(() => {
-    getTodoItems(0, 10).then(items => setTodoItems(items));
+    // getTodoItems(0, 100).then(items => setTodoItems(items));
+    getTodos()
     setData(todoItems)
-    console.log(Colors);
+    console.log(todoItems?.length);
   }, []);
 
+  const getTodos = async ()=>{
+    const res = JSON.parse(await  AsyncStorage.getItem('todoItems'))
+    // console.log("todos ",res, res.length);
+    setTodoItems(res)
+  }
+
   const handleAddTodo = () => {
+    // setLoading(true)
     addTodoItem(newTodoItem)
     .then(() => {
-      getTodoItems(0, 10).then(items => {
-        setTodoItems(items);
-        showToast("Todo Added", "lightgreen", "green", flashMessageRef, 10);
-        setNewTodoItem("")
-      });
+      getTodos()
+      
+      showToast("Todo Added", "lightgreen", "green", flashMessageRef, 10);
+      setNewTodoItem("")
     })
     .catch((e)=>{
       showToast(e.message, "yellow", "chromeYellow",  flashMessageRef, 10);
@@ -73,9 +81,7 @@ const Todo = () => {
 
   const renderTodo = ({item})=>{
     return(
-      <View key={item.id} style={styles.todoItem}>
-        <Text style={styles.sectionDescription}>{item.title}</Text>
-      </View>
+      <TodoItem todoItems={todoItems} setTodoItems={setTodoItems} key={item?.id} item={item} flashMessageRef={flashMessageRef} />
     )
   }
   // const handleLoadData = () => {
@@ -130,23 +136,17 @@ const Todo = () => {
             placeholderTextColor={isDarkMode ? "whitesmoke" : "black"}
             onChange={e => {setNewTodoItem(e.nativeEvent.text)}}
           />
-          <Button
-            title="Add"
-            onPress={handleAddTodo}
-          />
+          <Button title="Add" onPress={handleAddTodo} />
         </View>
-        <View style={styles.sectionContainer}>
-          {todoItems.map((item) => (
-            <TodoItem todoItems={todoItems} setTodoItems={setTodoItems} key={item?.id} item={item} flashMessageRef={flashMessageRef} />
-          ))}
-          {/* <FlatList 
+        <View style={[styles.sectionContainer, backgroundStyle]}>
+          <FlatList 
             data={todoItems}
             renderItem={renderTodo}
             keyExtractor={(item) => item.id}
-            onEndReached={()=> {setPageSize(prev=>prev+3); handleAddTodo()}}
-            onEndReachedThreshold={0.5}
-            ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
-          /> */}
+            // onEndReached={()=> {setPageSize(prev=>prev+3); handleAddTodo()}}
+            // onEndReachedThreshold={0.5}
+            // ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
+          />
         </View>
         
       </ScrollView>
