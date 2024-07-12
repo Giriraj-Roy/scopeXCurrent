@@ -1,15 +1,17 @@
 import { Modal, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import FiraCode, { FiraCodeBold } from '../assets/fonts/FiraCode'
 import auth from '@react-native-firebase/auth'
 import { GoogleSigninButton } from '@react-native-google-signin/google-signin'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Button from './Button'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { AppContext } from '../utils/AppContext'
 
 const LoginModal = ({isVisible, navigation ,googleLogin, phone, setPhone}) => {
 
-    const isDarkMode = useColorScheme()==='dark'
+    // const isDarkMode = useColorScheme()==='dark'
+    const {isDarkMode} = useContext(AppContext);
 
     const signInPhone = async (phoneNumber) => {
         console.log("Executing sign in with phone number");

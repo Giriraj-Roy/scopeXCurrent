@@ -7,11 +7,14 @@
 
 import React from 'react';
 import AppNavigation from './src/navigation/AppNavigation';
+import AppProvider from './src/utils/AppProvider';
 
 const App = ()=>{
   try{
     return(
-      <AppNavigation/>
+      <AppProvider>
+        <AppNavigation/>
+      </AppProvider>
     ) 
   }catch(e){
     console.log("Error from app root", e)

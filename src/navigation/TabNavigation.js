@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, Platform, useColorScheme} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import 'react-native-gesture-handler';
@@ -6,6 +6,7 @@ import Todo from '../screens/Todo';
 import Profile from '../screens/Profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NoAccount from '../screens/NoAccount';
+import { AppContext } from '../utils/AppContext';
 
 
 const Tab = createBottomTabNavigator();
@@ -13,7 +14,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigation = () => {
   
   const [token, setToken] = useState("")
-  const isDarkMode = useColorScheme()==='dark'
+  const {isDarkMode} = useContext(AppContext);
     const getToken = async ()=>{
         try{
             setToken(await AsyncStorage.getItem("userToken"))

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   Button,
@@ -21,12 +21,14 @@ import showToast from '../components/Toast';
 import { useInfiniteQuery } from 'react-query';
 import EditTodo from '../components/EditTodo';
 import TodoItem from '../components/TodoItem';
+import { AppContext } from '../utils/AppContext';
+import Loader from '../components/Loader';
 
 
 const Todo = () => {
 
-  const isDarkMode = useColorScheme() === 'dark';
-  const [isLoading, setIsLoading] = useState(false);
+
+  const {isDarkMode, loading} = useContext(AppContext);
   const [editTodoVisible, setEditTodoVisible] = useState(false);
   const [todoItems, setTodoItems] = useState([]);
   const [newTodoItem, setNewTodoItem] = useState('');
@@ -76,27 +78,27 @@ const Todo = () => {
       </View>
     )
   }
-  const handleLoadData = () => {
-    if (!hasNextPage || isLoading) return;
-    setIsLoading(true);
-    setPage((prevPage) => prevPage + 1);
-    loadNextPage();
-  };
+  // const handleLoadData = () => {
+  //   if (!hasNextPage || isLoading) return;
+  //   setIsLoading(true);
+  //   setPage((prevPage) => prevPage + 1);
+  //   loadNextPage();
+  // };
   
-  const loadNextPage = () => {
-    // Load the next page of data from your existing data
-    let pageSize=3;
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = startIndex + pageSize;
-    const nextPageData = data.slice(startIndex, endIndex);
+  // const loadNextPage = () => {
+  //   // Load the next page of data from your existing data
+  //   let pageSize=3;
+  //   const startIndex = (page - 1) * pageSize;
+  //   const endIndex = startIndex + pageSize;
+  //   const nextPageData = data.slice(startIndex, endIndex);
   
-    if (nextPageData.length < pageSize) {
-      setHasNextPage(false);
-    }
+  //   if (nextPageData.length < pageSize) {
+  //     setHasNextPage(false);
+  //   }
   
-    setData((prevData) => [...prevData, ...nextPageData]);
-    setIsLoading(false);
-  };
+  //   setData((prevData) => [...prevData, ...nextPageData]);
+  //   setIsLoading(false);
+  // };
   const handleEditPress = ()=>{
     try{
       setEditTodoVisible(true);
@@ -108,6 +110,7 @@ const Todo = () => {
 
 
   return (
+    loading ? <Loader/> :
     <SafeAreaView style={[{backgroundStyle}, {flex: 1}]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}

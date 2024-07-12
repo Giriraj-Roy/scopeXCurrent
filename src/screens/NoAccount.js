@@ -1,5 +1,5 @@
 import { ImageBackground, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import FiraCode from '../assets/fonts/FiraCode'
 import LoginModal from '../components/LoginModal'
 import FlashMessage from 'react-native-flash-message'
@@ -7,12 +7,14 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { WEB_CLIENT_ID } from '../constants/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { AppContext } from '../utils/AppContext'
 
 const NoAccount = ({navigation}) => {
 
   const [phone, setPhone] = useState("")
   const flashMsgRef = useRef()
-  const isDarkMode = useColorScheme()==='dark'
+  // const isDarkMode = useColorScheme()==='dark'
+  const {isDarkMode} = useContext(AppContext);
 
 
 

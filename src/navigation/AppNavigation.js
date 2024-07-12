@@ -6,14 +6,22 @@ import Login from '../screens/Login';
 import TabNavigation from './TabNavigation';
 import Todo from '../screens/Todo';
 import Profile from '../screens/Profile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AppNavigation = () => {
 
     const Stack = createStackNavigator();
+    const getToken = async ()=>{
+        try{
+            return await AsyncStorage.getItem('userToken')
+        }catch(e){
+            console.error("Failed to get token", e);
+        }
+    }
 
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName='Login'>
+            <Stack.Navigator initialRouteName={`${ getToken()!=null ? 'TabNavigation' : 'Login'}`}>
                 <Stack.Screen name="TabNavigation" component={TabNavigation} options={{headerShown: false}} />
                 <Stack.Screen name="Login" component={Login} options={{headerShown: false}} />
                 <Stack.Screen name="Todo" component={Todo} options={{headerShown: false}} />

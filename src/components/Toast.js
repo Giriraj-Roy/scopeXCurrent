@@ -20,7 +20,7 @@ const showToast = (text,color,borderColor,flashMessageRef,bottomPosition) => {
       titleStyle: {textAlign: 'center',color:'black'},
     //   icon: props => <Image source={imgSrc} style={{marginLeft:10}}/>,
     };
-    flashMessageRef.current.showMessage(message);
+    flashMessageRef?.current?.showMessage(message);
   };
 
 export default showToast
