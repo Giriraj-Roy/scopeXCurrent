@@ -33,10 +33,9 @@ const Todo = () => {
   const [editTodoVisible, setEditTodoVisible] = useState(false);
   const [todoItems, setTodoItems] = useState([]);
   const [newTodoItem, setNewTodoItem] = useState('');
-  const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [hasNextPage, setHasNextPage] = useState(true);
+  const [displayData, setDisplayData] = useState([]);
+  const [isInfiniteLoading, setIsInfiniteLoading] = useState(false);
   const flashMessageRef = useRef()
 
   // const { data, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
@@ -55,7 +54,7 @@ const Todo = () => {
   useEffect(() => {
     // getTodoItems(0, 100).then(items => setTodoItems(items));
     getTodos()
-    setData(todoItems)
+    // setData(todoItems)
     console.log(todoItems?.length);
   }, []);
 
@@ -105,27 +104,30 @@ const Todo = () => {
   //   setData((prevData) => [...prevData, ...nextPageData]);
   //   setIsLoading(false);
   // };
-  const handleEditPress = ()=>{
-    try{
-      setEditTodoVisible(true);
 
-    }catch(e){
-      console.log("Error handleEditPress", e);
-    }
-  }
+  const loadNextPage = () => {
+    if (isInfiniteLoading) return;
+    setIsInfiniteLoading(true);
+    const startIndex = (page - 1) * 10;
+    const endIndex = startIndex + 10;
+    const nextPageData = todoItems.slice(startIndex, endIndex);
+    setDisplayData((prevData) => [...prevData, ...nextPageData]);
+    setPage((prevPage) => prevPage + 1);
+    setIsInfiniteLoading(false);
+  };
+  
 
 
   return (
     loading ? <Loader/> :
-    <SafeAreaView style={[{backgroundStyle}, {flex: 1}]}>
+    <SafeAreaView style={[backgroundStyle, {flex: 1}]}>
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView  style={backgroundStyle}>
+      <View  style={backgroundStyle}>
         <FlashMessage ref={flashMessageRef} />
         <View style={styles.sectionContainer}>
-          {/* <Text style={styles.sectionTitle}>TODO</Text> */}
           <FiraCode name={"TODO"} style={isDarkMode ? styles.sectionTitleDark : styles.sectionTitle} />
         </View>
         <View style={styles.sectionContainer}>
@@ -138,18 +140,19 @@ const Todo = () => {
           />
           <Button title="Add" onPress={handleAddTodo} />
         </View>
-        <View style={[styles.sectionContainer, backgroundStyle]}>
+        <View style={[styles.sectionContainer, backgroundStyle, {height : "70%"}]}>
           <FlatList 
             data={todoItems}
             renderItem={renderTodo}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id}
-            // onEndReached={()=> {setPageSize(prev=>prev+3); handleAddTodo()}}
-            // onEndReachedThreshold={0.5}
-            // ListFooterComponent={isLoading ? <ActivityIndicator /> : null}
+            onEndReached={loadNextPage}
+            onEndReachedThreshold={0.2}
+            ListFooterComponent={isInfiniteLoading ? <ActivityIndicator /> : null}
           />
         </View>
         
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
